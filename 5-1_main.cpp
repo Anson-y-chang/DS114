@@ -11,12 +11,14 @@ int main() {
   cin >> val;
 
   ListNode *head = nullptr;
+  ListNode *curr = nullptr;
 
   if (val) {
     head = new ListNode(val);
+    curr = head;
     while (cin >> val) {
-      head->next = new ListNode(val);
-      head = head->next;
+      curr->next = new ListNode(val);
+      curr = curr->next;
     }
   }
 
