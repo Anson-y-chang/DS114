@@ -3,13 +3,11 @@
 #ifndef DS_Q5_H
 #define DS_Q5_H
 
-typedef struct DamageNode {
-  int damage;
-  struct DamageNode *next;
-} DamageNode_t;
+typedef struct ListNode {
+  int val;
+  struct ListNode *next;
+} ListNode;
 
-int *mapDamage(DamageNode_t *head, int m, int n);
-
-int *mapRotatingDamage(DamageNode_t *head, int m, int n, int k);
+ListNode *swapDancePairs(ListNode *head);
 
 #endif

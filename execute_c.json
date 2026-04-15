@@ -1,0 +1,101 @@
+{
+  "tasks": {
+    "execute": [
+      {
+        "name": "copy submission source",
+        "memory_limit": 8388608,
+        "command": [
+          "cp",
+          "source.submission.__SUBMISSION_FILE__",
+          "__SUBMISSION_FILE__"
+        ]
+      },
+      {
+        "scope": {
+          "export": [
+            "submission.run.__TASK_ID__.meta",
+            "user.__TASK_ID__.stdout"
+          ],
+          "import": [
+            "__TASK_ID__.stdin",
+            "submission.out"
+          ]
+        },
+        "meta": "submission.run.__TASK_ID__.meta",
+        "name": "submission.run.__TASK_ID__",
+        "output_limit": "__OUTPUT_LIMIT__",
+        "stdin": "__TASK_ID__.stdin",
+        "memory_limit": "__MEMORY_LIMIT__",
+        "command": [
+          "./submission.out"
+        ],
+        "stdout": "user.__TASK_ID__.stdout",
+        "time_limit": "__TIME_LIMIT__",
+        "record": {
+          "enable": false
+        }
+      }
+    ]
+  },
+  "prepare": {
+    "execute": [
+      {
+        "name": "copy submission source",
+        "memory_limit": 8388608,
+        "command": [
+          "cp",
+          "source.submission.__SUBMISSION_FILE__",
+          "__SUBMISSION_FILE__"
+        ]
+      },
+      {
+        "name": "copy TA source",
+        "memory_limit": 8388608,
+        "command": [
+          "cp",
+          "source.submission.__TA_SOURCE__",
+          "5-2_main.c"
+        ]
+      },
+      {
+        "name": "copy header file",
+        "memory_limit": 8388608,
+        "command": [
+          "cp",
+          "source.submission.__TA_HEADER__",
+          "ds_q5.h"
+        ]
+      },
+      {
+        "meta": "submission.compile.meta",
+        "name": "submission.compile",
+        "memory_limit": 8388608,
+        "command": [
+          "gcc",
+          "-DOJ_MODE",
+          "./5-2_main.c",
+          "__SUBMISSION_FILE__",
+          "-o",
+          "submission.out",
+          "-lm",
+          "-O2"
+        ],
+        "stdout": "submission.compile.stdout",
+        "record": {
+          "stdout": 4096,
+          "enable": true,
+          "stderr": 4096
+        },
+        "stderr": "submission.compile.stdout"
+      }
+    ],
+    "file": {
+      "source.submission.__TA_SOURCE__": "https://raw.githubusercontent.com/yali30814936/DS113/refs/heads/main/Assignment%205/5-2_main.c",
+      "source.submission.__TA_HEADER__": "https://raw.githubusercontent.com/yali30814936/DS113/refs/heads/main/Assignment%205/ds_q5.h",
+      "source.submission.__SUBMISSION_FILE__": "__SUBMISSION_URL__"
+    }
+  },
+  "final": {
+    "execute": []
+  }
+}
