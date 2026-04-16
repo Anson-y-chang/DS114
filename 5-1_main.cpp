@@ -8,21 +8,15 @@ int main() {
   cin.tie(0);
 
   int val;
-  cin >> val;
+  ListNode *dummyHead = new ListNode(0);
+  ListNode *curr = dummyHead;
 
-  ListNode *head = nullptr;
-  ListNode *curr = nullptr;
-
-  if (val) {
-    head = new ListNode(val);
-    curr = head;
-    while (cin >> val) {
-      curr->next = new ListNode(val);
-      curr = curr->next;
-    }
+  while (cin >> val) {
+    curr->next = new ListNode(val);
+    curr = curr->next;
   }
 
-  ListNode *res = swapDancePairs(head);
+  ListNode *res = swapDancePairs(dummyHead->next);
   while (res) {
     cout << res->val << " ";
     res = res->next;

@@ -1,6 +1,7 @@
 test_case/*
 format_input.cpp
-format_input
+format
 student_submission.c
 student_submission.cpp
 submission
+student_submission_cpp
