@@ -262,7 +262,7 @@ int main() {
   } else if (operation == 2) {
     // Test delete_val
     int value;
-    cin >> value;
+    scanf("%d", &value);
 
     InorderResult originalResult = {.size = 0};
     collectInorder(root, &originalResult);
