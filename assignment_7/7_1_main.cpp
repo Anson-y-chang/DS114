@@ -149,7 +149,7 @@ int main() {
   int n;
   cin >> n;
 
-  int arr[2000];
+  int arr[20000];
   for (int i = 0; i < n; i++) {
     cin >> arr[i];
   }
