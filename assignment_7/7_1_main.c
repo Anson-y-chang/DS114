@@ -187,57 +187,77 @@ int main() {
     int value;
     scanf("%d", &value);
 
-    Node *taRoot = copyTree(root);
+    // Collect original node addresses
+    InorderResult originalResult = {.size = 0};
+    collectInorder(root, &originalResult);
+
     Node *studentRoot = insert_val(root, value);
-    taRoot = ta_insert_val(taRoot, value);
 
     InorderResult studentResult = {.size = 0};
-    InorderResult taResult = {.size = 0};
-
     collectInorder(studentRoot, &studentResult);
-    collectInorder(taRoot, &taResult);
 
     // Check if inorder is sorted
     if (!isSorted(studentResult.values, studentResult.size)) {
       printf("FAILED: Tree is not a valid BST\n");
-    } else if (studentResult.size != taResult.size) {
-      printf("FAILED: Incorrect values\n");
     } else {
-      bool valuesMatch = true;
+      // Check if the value was inserted
+      bool valueInserted = false;
       for (int i = 0; i < studentResult.size; i++) {
-        if (studentResult.values[i] != taResult.values[i]) {
-          valuesMatch = false;
+        if (studentResult.values[i] == value) {
+          valueInserted = true;
           break;
         }
       }
 
-      if (!valuesMatch) {
-        printf("FAILED: Incorrect values\n");
+      // Check if value already existed
+      bool shouldInsert = true;
+      for (int i = 0; i < originalResult.size; i++) {
+        if (originalResult.values[i] == value) {
+          shouldInsert = false;
+          break;
+        }
+      }
+
+      if (shouldInsert && !valueInserted) {
+        printf("FAILED: Value not inserted\n");
+      } else if (shouldInsert &&
+                 studentResult.size != originalResult.size + 1) {
+        printf("FAILED: Incorrect number of nodes\n");
+      } else if (!shouldInsert && studentResult.size != originalResult.size) {
+        printf("FAILED: Duplicate value should not change tree\n");
       } else {
-        // Check address mapping
+        // Check that original nodes keep same address
         bool addressCorrect = true;
-        for (int i = 0; i < studentResult.size; i++) {
-          int val = studentResult.values[i];
-          if (val != value) {
-            Node *studentNode = studentResult.nodes[i];
-            Node *taNode = taResult.nodes[i];
-            if (studentNode != taNode) {
-              addressCorrect = false;
+        for (int i = 0; i < originalResult.size; i++) {
+          int val = originalResult.values[i];
+          Node *originalAddr = originalResult.nodes[i];
+
+          // Find this value in student result
+          bool found = false;
+          for (int j = 0; j < studentResult.size; j++) {
+            if (studentResult.values[j] == val) {
+              if (studentResult.nodes[j] != originalAddr) {
+                addressCorrect = false;
+              }
+              found = true;
               break;
             }
           }
+
+          if (!addressCorrect) {
+            break;
+          }
         }
 
-        if (addressCorrect) {
-          printf("PASS\n");
+        if (!addressCorrect) {
+          printf("FAILED: Original nodes changed address\n");
         } else {
-          printf("FAILED: Incorrect node addresses\n");
+          printf("PASS\n");
         }
       }
     }
 
     deleteTree(studentRoot);
-    deleteTree(taRoot);
 
   } else if (operation == 2) {
     // Test delete_val

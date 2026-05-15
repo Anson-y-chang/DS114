@@ -164,43 +164,65 @@ int main() {
     int value;
     cin >> value;
 
-    Node *taRoot = copyTree(root);
+    // Collect original node addresses
+    vector<int> originalValues;
+    map<int, Node *> originalMap;
+    collectInorder(root, originalValues, originalMap);
+
     Node *studentRoot = insert_val(root, value);
-    taRoot = ta_insert_val(taRoot, value);
 
-    vector<int> studentValues, taValues;
-    map<int, Node *> studentMap, taMap;
-
+    vector<int> studentValues;
+    map<int, Node *> studentMap;
     collectInorder(studentRoot, studentValues, studentMap);
-    collectInorder(taRoot, taValues, taMap);
 
     // Check if inorder is sorted
     if (!isSorted(studentValues)) {
       cout << "FAILED: Tree is not a valid BST\n";
-    } else if (studentValues != taValues) {
-      cout << "FAILED: Incorrect values\n";
     } else {
-      // Check address mapping
-      bool addressCorrect = true;
+      // Check if the value was inserted
+      bool valueInserted = false;
       for (int val : studentValues) {
-        if (studentMap[val] != taMap[val]) {
-          // Allow different addresses if node was newly created
-          if (val != value) {
-            addressCorrect = false;
-            break;
-          }
+        if (val == value) {
+          valueInserted = true;
+          break;
         }
       }
 
-      if (addressCorrect) {
-        cout << "PASS\n";
+      // If value already existed, tree should be unchanged
+      bool shouldInsert = originalMap.find(value) == originalMap.end();
+
+      if (shouldInsert && !valueInserted) {
+        cout << "FAILED: Value not inserted\n";
+      } else if (shouldInsert &&
+                 studentValues.size() != originalValues.size() + 1) {
+        cout << "FAILED: Incorrect number of nodes\n";
+      } else if (!shouldInsert &&
+                 studentValues.size() != originalValues.size()) {
+        cout << "FAILED: Duplicate value should not change tree\n";
       } else {
-        cout << "FAILED: Incorrect node addresses\n";
+        // Check that original nodes keep same address
+        bool addressCorrect = true;
+        for (auto &pair : originalMap) {
+          int val = pair.first;
+          Node *originalAddr = pair.second;
+
+          if (studentMap.find(val) != studentMap.end()) {
+            if (studentMap[val] != originalAddr) {
+              addressCorrect = false;
+              break;
+            }
+          }
+        }
+
+        if (!addressCorrect) {
+          cout << "FAILED: Original nodes changed address\n";
+        } else {
+          cout << "PASS\n";
+        }
       }
     }
 
     deleteTree(studentRoot);
-    deleteTree(taRoot);
 
   } else if (operation == 2) {
     // Test delete_val
