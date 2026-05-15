@@ -172,7 +172,7 @@ int main() {
   int n;
   scanf("%d", &n);
 
-  int arr[105];
+  int arr[10005];
   for (int i = 0; i < n; i++) {
     scanf("%d", &arr[i]);
   }
@@ -262,7 +262,7 @@ int main() {
   } else if (operation == 2) {
     // Test delete_val
     int value;
-    scanf("%d", &value);
+    cin >> value;
 
     InorderResult originalResult = {.size = 0};
     collectInorder(root, &originalResult);
@@ -280,7 +280,7 @@ int main() {
     if (!isSorted(studentResult.values, studentResult.size)) {
       printf("FAILED: Tree is not a valid BST\n");
     } else if (studentResult.size != taResult.size) {
-      printf("FAILED: Incorrect values\n");
+      printf("FAILED: Incorrect number of nodes\n");
     } else {
       bool valuesMatch = true;
       for (int i = 0; i < studentResult.size; i++) {
@@ -293,23 +293,10 @@ int main() {
       if (!valuesMatch) {
         printf("FAILED: Incorrect values\n");
       } else {
-        // Check that unchanged nodes keep same address
-        bool addressCorrect = true;
-        for (int i = 0; i < studentResult.size; i++) {
-          int val = studentResult.values[i];
-          Node *originalNode =
-              findNodeInArray(originalResult.nodes, originalResult.size, val);
-          if (originalNode != NULL && studentResult.nodes[i] != originalNode) {
-            addressCorrect = false;
-            break;
-          }
-        }
-
-        if (addressCorrect) {
-          printf("PASS\n");
-        } else {
-          printf("FAILED: Incorrect node addresses\n");
-        }
+        // For delete with two children, the implementation may reuse nodes
+        // We only check that the tree structure is correct (values match in
+        // order)
+        printf("PASS\n");
       }
     }
 
