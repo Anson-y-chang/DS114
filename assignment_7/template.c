@@ -25,7 +25,7 @@ Node *buildTree(int arr[], int n) {
 
   Node *root = createNode(arr[0]);
 
-  Node *queue[105];
+  Node *queue[20000];
   int front = 0;
   int rear = 0;
 

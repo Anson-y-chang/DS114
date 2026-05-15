@@ -1,0 +1,81 @@
+{
+  "tasks": {
+    "execute": [
+      {
+        "scope": {
+          "export": [
+            "submission.run.__TASK_ID__.meta",
+            "user.__TASK_ID__.stdout"
+          ],
+          "import": [
+            "__TASK_ID__.stdin",
+            "submission.out"
+          ]
+        },
+        "meta": "submission.run.__TASK_ID__.meta",
+        "name": "submission.run.__TASK_ID__",
+        "output_limit": "__OUTPUT_LIMIT__",
+        "stdin": "__TASK_ID__.stdin",
+        "memory_limit": "__MEMORY_LIMIT__",
+        "command": [
+          "./submission.out"
+        ],
+        "stdout": "user.__TASK_ID__.stdout",
+        "time_limit": "__TIME_LIMIT__",
+        "record": {
+          "enable": false
+        }
+      }
+    ]
+  },
+  "prepare": {
+    "execute": [
+      {
+        "name": "copy submission source",
+        "memory_limit": 8388608,
+        "command": [
+          "cp",
+          "source.submission.__SUBMISSION_FILE__",
+          "student_submission.c"
+        ]
+      },
+      {
+        "name": "copy TA main",
+        "memory_limit": 8388608,
+        "command": [
+          "cp",
+          "source.ta_main.c",
+          "ta_main.c"
+        ]
+      },
+      {
+        "meta": "submission.compile.meta",
+        "name": "submission.compile",
+        "memory_limit": 8388608,
+        "command": [
+          "g++",
+          "student_submission.c",
+          "ta_main.c",
+          "-o",
+          "submission.out",
+          "-O2",
+          "-std=c++11"
+        ],
+        "stdout": "submission.compile.stdout",
+        "record": {
+          "stdout": 4096,
+          "enable": true,
+          "stderr": 4096
+        },
+        "stderr": "submission.compile.stdout"
+      }
+    ],
+    "file": {
+      "source.ta_main.c": "https://raw.githubusercontent.com/Anson-y-chang/DS114/refs/heads/main/assignment_7/7_1_main.c",
+      "source.submission.__SUBMISSION_FILE__": "__SUBMISSION_URL__"
+    }
+  },
+  "final": {
+    "execute": []
+  }
+}
