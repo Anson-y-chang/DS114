@@ -18,37 +18,7 @@ Node *delete_val(Node *root, int value);
 int closest_val(Node *root, int value);
 Node *trim_BST(Node *root, int low, int high);
 
-// TA's reference implementations
-static Node *ta_buildTree(int arr[], int n) {
-  if (n == 0 || arr[0] == -1)
-    return nullptr;
-
-  Node *root = new Node(arr[0]);
-  queue<Node *> q;
-  q.push(root);
-
-  int i = 1;
-
-  while (!q.empty() && i < n) {
-    Node *cur = q.front();
-    q.pop();
-
-    if (i < n && arr[i] != -1) {
-      cur->left = new Node(arr[i]);
-      q.push(cur->left);
-    }
-    i++;
-
-    if (i < n && arr[i] != -1) {
-      cur->right = new Node(arr[i]);
-      q.push(cur->right);
-    }
-    i++;
-  }
-
-  return root;
-}
-
+// TA's reference implementations for validation
 static Node *ta_insert_val(Node *root, int value) {
   if (root == nullptr)
     return new Node(value);
@@ -176,9 +146,6 @@ static Node *copyTree(Node *root) {
 }
 
 int main() {
-  int mode;
-  cin >> mode;
-
   int n;
   cin >> n;
 
@@ -187,15 +154,7 @@ int main() {
     cin >> arr[i];
   }
 
-  Node *root = nullptr;
-
-  if (mode == 1) {
-    // Test student's buildTree()
-    root = buildTree(arr, n);
-  } else {
-    // TA's correct builder
-    root = ta_buildTree(arr, n);
-  }
+  Node *root = buildTree(arr, n);
 
   int operation;
   cin >> operation;
